@@ -1,0 +1,60 @@
+# 🚀 Render.com Deployment Configuration
+# Automatisches Deployment der Triangulation App
+
+version: "1"
+
+services:
+  # Frontend Service (React App)
+  - type: web
+    name: triangulation-frontend
+    runtime: docker
+    dockerfilePath: ./frontend/Dockerfile.render
+    dockerContext: ./frontend
+    plan: free
+    region: frankfurt
+    branch: main
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: REACT_APP_API_URL
+        value: https://triangulation-backend.onrender.com
+      - key: REACT_APP_VERSION
+        value: "2.0.0"
+    
+  # Backend Service (Flask API)  
+  - type: web
+    name: triangulation-backend
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile.render
+    dockerContext: ./backend
+    plan: free
+    region: frankfurt
+    branch: main
+    healthCheckPath: /api/health
+    envVars:
+      - key: FLASK_ENV
+        value: production
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      - key: CORS_ORIGINS
+        value: "https://triangulation-frontend.onrender.com"
+      - key: APP_VERSION
+        value: "2.0.0"
+
+  # Redis Service (Optional für Caching)
+  - type: redis
+    name: triangulation-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+
+# Environment Groups für gemeinsame Konfiguration
+envVarGroups:
+  - name: triangulation-shared
+    envVars:
+      - key: APP_VERSION
+        value: "2.0.0"
+      - key: LOG_LEVEL
+        value: INFO
+      - key: CORS_ORIGINS
+        value: "https://triangulation-frontend.onrender.com"
