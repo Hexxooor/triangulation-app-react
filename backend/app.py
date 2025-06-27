@@ -58,13 +58,6 @@ class AdvancedTriangulationCalculator:
                 result['x'], result['y'], center_lat, center_lng
             )
             
-<<<<<<< HEAD
-            return {
-                "lat": lat,
-                "lng": lng,
-                "accuracy": result.get('accuracy', 0),
-                "method": result.get('method', 'unknown'),
-=======
             # Erweiterte Statistiken berechnen
             stats = AdvancedTriangulationCalculator.calculate_statistics(
                 result, cartesian_points
@@ -74,11 +67,15 @@ class AdvancedTriangulationCalculator:
                 "lat": lat,
                 "lng": lng,
                 "x": result['x'],
-                "y": result['y'],
+                "y": result['y'], 
                 "accuracy": result.get('accuracy', 0),
                 "method": result.get('method', 'unknown'),
                 "statistics": stats,
->>>>>>> 4a542fb (f)
+            return {
+                "lat": lat,
+                "lng": lng,
+                "accuracy": result.get('accuracy', 0),
+                "method": result.get('method', 'unknown'),
                 "point_count": len(points),
                 "confidence": result.get('confidence', 0)
             }
@@ -90,11 +87,8 @@ class AdvancedTriangulationCalculator:
     def multilaterate_advanced(points: List[Dict]) -> Dict[str, Any]:
         """
         Erweiterte Multilateration für beliebig viele Punkte
-<<<<<<< HEAD
-        Verwendet Weighted Least Squares
-=======
         Verwendet Weighted Least Squares und Ausreißer-Erkennung
->>>>>>> 4a542fb (f)
+        Verwendet Weighted Least Squares
         """
         try:
             n = len(points)
@@ -102,23 +96,17 @@ class AdvancedTriangulationCalculator:
             # Erstelle Design-Matrix für Least Squares
             A = np.zeros((n, 2))
             b = np.zeros(n)
-<<<<<<< HEAD
-            weights = np.ones(n)
-=======
             weights = np.ones(n)  # Standardgewichte
->>>>>>> 4a542fb (f)
+            weights = np.ones(n)
             
             for i, point in enumerate(points):
                 A[i, 0] = 2 * point['x']
                 A[i, 1] = 2 * point['y']
                 b[i] = (point['x']**2 + point['y']**2 - point['d']**2)
-<<<<<<< HEAD
-                weights[i] = 1.0 / (1.0 + point['d'] / 1000.0)
-=======
                 
                 # Gewichtung basierend auf Entfernung (nähere Punkte = höhere Genauigkeit)
                 weights[i] = 1.0 / (1.0 + point['d'] / 1000.0)  # Normalisiert auf km
->>>>>>> 4a542fb (f)
+                weights[i] = 1.0 / (1.0 + point['d'] / 1000.0)
             
             # Weighted Least Squares
             W = np.diag(weights)
@@ -131,9 +119,6 @@ class AdvancedTriangulationCalculator:
             solution = np.linalg.solve(AtWA, AtWb)
             x, y = solution[0], solution[1]
             
-<<<<<<< HEAD
-            # Berechne Genauigkeitsmetriken
-=======
             # Residuals und Fehleranalyse
             predicted = A @ solution
             residuals = b - predicted
@@ -144,17 +129,13 @@ class AdvancedTriangulationCalculator:
             max_error = np.max(np.abs(weighted_residuals))
             
             # Einzelne Entfernungsfehler berechnen
->>>>>>> 4a542fb (f)
+            # Berechne Genauigkeitsmetriken
             distance_errors = []
             for point in points:
                 calculated_dist = math.sqrt((x - point['x'])**2 + (y - point['y'])**2)
                 error = abs(calculated_dist - point['d'])
                 distance_errors.append(error)
             
-<<<<<<< HEAD
-            rmse = np.sqrt(np.mean(np.array(distance_errors)**2))
-            confidence = max(0, min(100, 100 * (1 - rmse / 50)))
-=======
             # Ausreißer-Erkennung (Punkte mit großem Fehler)
             mean_error = np.mean(distance_errors)
             std_error = np.std(distance_errors)
@@ -180,25 +161,23 @@ class AdvancedTriangulationCalculator:
                 suggestions.append("Fügen Sie mehr Referenzpunkte hinzu für bessere Genauigkeit")
             if rmse > 100:
                 suggestions.append("Überprüfen Sie die Entfernungsmessungen")
->>>>>>> 4a542fb (f)
+            rmse = np.sqrt(np.mean(np.array(distance_errors)**2))
+            confidence = max(0, min(100, 100 * (1 - rmse / 50)))
             
             return {
                 "x": x,
                 "y": y,
                 "accuracy": rmse,
                 "method": f"Weighted Least Squares ({n} Punkte)",
-<<<<<<< HEAD
-                "confidence": confidence
-=======
                 "confidence": confidence,
                 "max_error": max_error,
                 "mean_error": mean_error,
                 "distance_errors": distance_errors,
-                "outliers": outliers,
+                "outliers": outliers, 
                 "suggestions": suggestions,
                 "residuals": residuals.tolist(),
                 "weights_used": weights.tolist()
->>>>>>> 4a542fb (f)
+                "confidence": confidence
             }
             
         except Exception as e:
@@ -236,12 +215,9 @@ class AdvancedTriangulationCalculator:
                 distance_errors.append(error)
             
             max_error = max(distance_errors)
-<<<<<<< HEAD
-=======
             mean_error = np.mean(distance_errors)
             
             # Konfidenz basierend auf Fehlern
->>>>>>> 4a542fb (f)
             confidence = max(0, min(100, 100 * (1 - max_error / 100)))
             
             return {
@@ -249,24 +225,19 @@ class AdvancedTriangulationCalculator:
                 "y": y,
                 "accuracy": max_error,
                 "method": "Exakte Trilateration (3 Punkte)",
-<<<<<<< HEAD
-                "confidence": confidence
-=======
                 "confidence": confidence,
                 "max_error": max_error,
                 "mean_error": mean_error,
                 "distance_errors": distance_errors,
                 "outliers": [],
                 "suggestions": [] if confidence > 70 else ["Überprüfen Sie die Entfernungsmessungen"]
->>>>>>> 4a542fb (f)
+                "confidence": confidence
             }
             
         except Exception as e:
             return {"error": f"Trilateration fehlgeschlagen: {str(e)}"}
     
     @staticmethod
-<<<<<<< HEAD
-=======
     def calculate_statistics(result: Dict, points: List[Dict]) -> Dict[str, Any]:
         """
         Berechnet erweiterte Statistiken für die Triangulation
@@ -303,7 +274,6 @@ class AdvancedTriangulationCalculator:
         return stats
     
     @staticmethod
->>>>>>> 4a542fb (f)
     def geo_to_cartesian(lat: float, lng: float, ref_lat: float, ref_lng: float) -> Tuple[float, float]:
         """
         Konvertiert Geo-Koordinaten zu lokalen kartesischen Koordinaten
@@ -346,10 +316,7 @@ def triangulate():
             return jsonify({"error": "Ungültige Anfrage - 'points' Array erforderlich"}), 400
         
         points = data['points']
-<<<<<<< HEAD
-=======
         auto_calculate = data.get('auto_calculate', True)
->>>>>>> 4a542fb (f)
         
         if len(points) < 3:
             return jsonify({"error": "Mindestens 3 Referenzpunkte erforderlich"}), 400
@@ -365,10 +332,6 @@ def triangulate():
             
             if point['distance'] <= 0:
                 return jsonify({"error": f"Punkt {i+1}: Entfernung muss größer als 0 sein"}), 400
-<<<<<<< HEAD
-        
-        # Berechne Triangulation
-=======
             
             if not (-90 <= point['lat'] <= 90):
                 return jsonify({"error": f"Punkt {i+1}: Ungültiger Breitengrad"}), 400
@@ -377,7 +340,8 @@ def triangulate():
                 return jsonify({"error": f"Punkt {i+1}: Ungültiger Längengrad"}), 400
         
         # Berechne erweiterte Triangulation
->>>>>>> 4a542fb (f)
+        
+        # Berechne Triangulation
         result = AdvancedTriangulationCalculator.calculate_position(points)
         
         if 'error' in result:
@@ -545,5 +509,5 @@ if __name__ == '__main__':
     print("   GET  /api/health - Health Check")
     print(f"\n📍 Server läuft auf Port {port}")
     
+    app.run(debug=debug, host='0.0.0.0', port=port)
     app.run(debug=True, host='0.0.0.0', port=5000)
->>>>>>> 4a542fb (f)
