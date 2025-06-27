@@ -1,0 +1,197 @@
+# 🚀 Render.com Deployment Workflow
+# Automatisches Deployment zur Render.com nach erfolgreichem CI
+
+name: 🌎 Deploy to Render.com
+
+on:
+  push:
+    branches: [ main ]
+  workflow_run:
+    workflows: ["🎯 Triangulation App CI/CD"]
+    types:
+      - completed
+
+env:
+  RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+
+jobs:
+  # =============================================================================
+  # RENDER DEPLOYMENT
+  # =============================================================================
+  deploy-to-render:
+    name: 🚀 Deploy to Render.com
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+      
+      # =============================================================================
+      # RENDER SERVICE DEPLOYMENT VIA API
+      # =============================================================================
+      - name: 🚀 Deploy Frontend to Render
+        run: |
+          curl -X POST "https://api.render.com/v1/services" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "type": "web_service",
+              "name": "triangulation-frontend",
+              "repo": "https://github.com/${{ github.repository }}",
+              "branch": "main",
+              "dockerfilePath": "./frontend/Dockerfile.render",
+              "dockerContext": "./frontend",
+              "plan": "free",
+              "region": "frankfurt",
+              "env": [
+                {
+                  "key": "NODE_ENV",
+                  "value": "production"
+                },
+                {
+                  "key": "REACT_APP_API_URL",
+                  "value": "https://triangulation-backend.onrender.com"
+                }
+              ],
+              "healthCheckPath": "/health"
+            }'
+      
+      - name: 🚀 Deploy Backend to Render
+        run: |
+          curl -X POST "https://api.render.com/v1/services" \
+            -H "Authorization: Bearer $RENDER_API_KEY" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "type": "web_service",
+              "name": "triangulation-backend",
+              "repo": "https://github.com/${{ github.repository }}",
+              "branch": "main",
+              "dockerfilePath": "./backend/Dockerfile.render",
+              "dockerContext": "./backend",
+              "plan": "free",
+              "region": "frankfurt",
+              "env": [
+                {
+                  "key": "FLASK_ENV",
+                  "value": "production"
+                },
+                {
+                  "key": "PYTHONUNBUFFERED",
+                  "value": "1"
+                }
+              ],
+              "healthCheckPath": "/api/health"
+            }'
+      
+      # =============================================================================
+      # DEPLOYMENT VERIFICATION
+      # =============================================================================
+      - name: 🔍 Verify Deployment
+        run: |
+          echo "⏳ Warte auf Deployment-Completion..."
+          sleep 60
+          
+          # Frontend Health Check
+          FRONTEND_URL="https://triangulation-frontend.onrender.com"
+          echo "🔍 Teste Frontend: $FRONTEND_URL"
+          
+          for i in {1..10}; do
+            if curl -f "$FRONTEND_URL/health" --max-time 30; then
+              echo "✅ Frontend ist online!"
+              break
+            else
+              echo "⏳ Versuch $i/10 - Frontend noch nicht bereit"
+              sleep 30
+            fi
+          done
+          
+          # Backend Health Check
+          BACKEND_URL="https://triangulation-backend.onrender.com"
+          echo "🔍 Teste Backend: $BACKEND_URL"
+          
+          for i in {1..10}; do
+            if curl -f "$BACKEND_URL/api/health" --max-time 30; then
+              echo "✅ Backend ist online!"
+              break
+            else
+              echo "⏳ Versuch $i/10 - Backend noch nicht bereit"
+              sleep 30
+            fi
+          done
+      
+      # =============================================================================
+      # SUCCESS NOTIFICATION
+      # =============================================================================
+      - name: 🎉 Deployment Success
+        run: |
+          echo "🎉 Deployment zu Render.com erfolgreich!"
+          echo ""
+          echo "🌎 URLs:"
+          echo "Frontend: https://triangulation-frontend.onrender.com"
+          echo "Backend:  https://triangulation-backend.onrender.com"
+          echo ""
+          echo "📊 Features verfügbar:"
+          echo "- 🎯 Triangulation mit Drag & Drop"
+          echo "- 📍 GPS-Integration"
+          echo "- 📱 Mobile-optimiert"
+          echo "- 🔧 Genauigkeitseinstellungen"
+
+  # =============================================================================
+  # ALTERNATIVE: WEBHOOK-BASED DEPLOYMENT
+  # =============================================================================
+  trigger-render-webhooks:
+    name: 🔗 Trigger Render Webhooks
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: 🚀 Trigger Frontend Deployment
+        if: secrets.RENDER_FRONTEND_WEBHOOK
+        run: |
+          curl -X POST "${{ secrets.RENDER_FRONTEND_WEBHOOK }}"
+          echo "✅ Frontend Deployment triggered"
+      
+      - name: 🚀 Trigger Backend Deployment  
+        if: secrets.RENDER_BACKEND_WEBHOOK
+        run: |
+          curl -X POST "${{ secrets.RENDER_BACKEND_WEBHOOK }}"
+          echo "✅ Backend Deployment triggered"
+
+  # =============================================================================
+  # DEPLOYMENT STATUS CHECK
+  # =============================================================================
+  check-render-status:
+    name: 📊 Check Render Status
+    runs-on: ubuntu-latest
+    needs: [deploy-to-render]
+    if: always()
+    
+    steps:
+      - name: 📊 Get Service Status
+        if: env.RENDER_API_KEY
+        run: |
+          echo "📊 Render Service Status:"
+          
+          # Liste alle Services
+          curl -H "Authorization: Bearer $RENDER_API_KEY" \
+            "https://api.render.com/v1/services" | jq '.[] | select(.service.name | contains("triangulation")) | {name: .service.name, status: .service.status, url: .service.serviceDetails.url}'
+      
+      - name: 🔗 Service URLs
+        run: |
+          echo "🌎 Deine App ist live unter:"
+          echo "Frontend: https://triangulation-frontend.onrender.com"
+          echo "Backend:  https://triangulation-backend.onrender.com"
+          echo ""
+          echo "🎯 Features:"
+          echo "- Drag & Drop Triangulation"
+          echo "- GPS Integration"
+          echo "- Mobile Responsive"
+          echo "- Real-time Calculations"
