@@ -1,0 +1,94 @@
+# 🐳 Docker Compose - Triangulation App Production
+# Vollständig containerisierte Triangulation-App mit erweiterten Features
+
+version: '3.8'
+
+services:
+  # Frontend Service (React + Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: triangulation-frontend
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=/api
+    networks:
+      - triangulation-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.triangulation.rule=Host(`triangulation.localhost`)"
+      - "traefik.http.services.triangulation.loadbalancer.server.port=80"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Backend Service (Python Flask API)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: triangulation-backend
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+      - PYTHONUNBUFFERED=1
+    volumes:
+      # Persistent data für Projekt-Speicherung
+      - triangulation-data:/app/data
+    networks:
+      - triangulation-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.triangulation-api.rule=Host(`api.triangulation.localhost`)"
+      - "traefik.http.services.triangulation-api.loadbalancer.server.port=5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5000/api/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+  # Optional: Redis für Caching und Session Management
+  redis:
+    image: redis:7-alpine
+    container_name: triangulation-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - triangulation-network
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-triangulation2024}
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# Networks
+networks:
+  triangulation-network:
+    driver: bridge
+    name: triangulation-network
+
+# Persistent Volumes
+volumes:
+  triangulation-data:
+    name: triangulation-data
+    driver: local
+  redis-data:
+    name: triangulation-redis-data
+    driver: local
