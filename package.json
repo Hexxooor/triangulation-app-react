@@ -1,0 +1,106 @@
+{
+  "name": "triangulation-app-react",
+  "version": "2.0.0",
+  "description": "🎯 Erweiterte Triangulation App mit Drag & Drop, GPS-Integration und Docker-Containerisierung",
+  "main": "index.js",
+  "private": true,
+  "author": "Hexxooor",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hexxooor/triangulation-app-react.git"
+  },
+  "homepage": "https://triangulation-frontend.onrender.com",
+  "keywords": [
+    "triangulation",
+    "geolocation", 
+    "react",
+    "flask",
+    "docker",
+    "gps",
+    "mapping",
+    "trilateration",
+    "render",
+    "ci-cd"
+  ],
+  "scripts": {
+    "dev": "docker-compose -f docker-compose.dev.yml up --build",
+    "dev:detached": "docker-compose -f docker-compose.dev.yml up --build -d",
+    "dev:down": "docker-compose -f docker-compose.dev.yml down",
+    "dev:logs": "docker-compose -f docker-compose.dev.yml logs -f",
+    "dev:clean": "docker-compose -f docker-compose.dev.yml down -v --remove-orphans",
+    
+    "prod": "docker-compose up --build -d",
+    "prod:down": "docker-compose down",
+    "prod:logs": "docker-compose logs -f",
+    "prod:clean": "docker-compose down -v --remove-orphans",
+    
+    "prod:extended": "docker-compose -f docker-compose.prod.yml up -d",
+    "prod:extended:down": "docker-compose -f docker-compose.prod.yml down",
+    
+    "build": "docker-compose build",
+    "build:no-cache": "docker-compose build --no-cache",
+    
+    "test": "docker-compose -f docker-compose.dev.yml run --rm test-runner",
+    "test:coverage": "docker-compose -f docker-compose.dev.yml run --rm test-runner npm test -- --coverage --watchAll=false",
+    
+    "lint:frontend": "cd frontend && npm run lint",
+    "lint:backend": "cd backend && python -m flake8 .",
+    
+    "install:frontend": "cd frontend && npm install",
+    "install:backend": "cd backend && pip install -r requirements.txt",
+    "install:all": "npm run install:frontend && npm run install:backend",
+    
+    "start:frontend": "cd frontend && npm start",
+    "start:backend": "cd backend && python app.py",
+    
+    "docker:prune": "docker system prune -f",
+    "docker:clean": "docker system prune -af --volumes",
+    
+    "backup": "docker-compose -f docker-compose.prod.yml run --rm backup",
+    "monitoring": "docker-compose -f docker-compose.prod.yml --profile monitoring up -d",
+    
+    "health": "curl -f http://localhost:3000/health && curl -f http://localhost:5000/api/health",
+    "health:live": "curl -f https://triangulation-frontend.onrender.com/health && curl -f https://triangulation-backend.onrender.com/api/health",
+    
+    "setup": "npm run install:all && npm run build",
+    "quick-start": "npm run dev:detached && echo '🚀 App läuft auf http://localhost:3000'",
+    
+    "deploy:staging": "docker-compose -f docker-compose.yml up -d",
+    "deploy:production": "docker-compose -f docker-compose.prod.yml up -d",
+    
+    "logs:frontend": "docker-compose logs -f frontend",
+    "logs:backend": "docker-compose logs -f backend",
+    
+    "shell:frontend": "docker-compose exec frontend sh",
+    "shell:backend": "docker-compose exec backend bash",
+    
+    "restart": "docker-compose restart",
+    "restart:frontend": "docker-compose restart frontend",
+    "restart:backend": "docker-compose restart backend"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.3",
+    "prettier": "^3.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "frontend/**/*.{js,jsx,ts,tsx,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ],
+    "backend/**/*.py": [
+      "black --line-length 100",
+      "git add"
+    ]
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
