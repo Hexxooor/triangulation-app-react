@@ -4,7 +4,6 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 ![Docker](https://img.shields.io/badge/docker-enabled-blue.svg)
 ![CI/CD](https://img.shields.io/badge/ci%2Fcd-enabled-green.svg)
-<<<<<<< HEAD
 ![Render](https://img.shields.io/badge/deploy-render.com-purple.svg)
 
 Eine moderne, containerisierte Web-Anwendung für präzise Triangulation mit erweiterten Features wie Drag & Drop, GPS-Integration und Echtzeit-Berechnung.
@@ -14,12 +13,6 @@ Eine moderne, containerisierte Web-Anwendung für präzise Triangulation mit erw
 **🚀 App ist live auf Render.com:**
 - **Frontend:** https://triangulation-frontend.onrender.com
 - **Backend API:** https://triangulation-backend.onrender.com
-=======
-
-Eine moderne, containerisierte Web-Anwendung für präzise Triangulation mit erweiterten Features wie Drag & Drop, GPS-Integration und Echtzeit-Berechnung.
-
-![Triangulation App Screenshot](docs/images/screenshot-main.png)
->>>>>>> 4a542fb (f)
 
 ## 🚀 Neue Features (Version 2.0)
 

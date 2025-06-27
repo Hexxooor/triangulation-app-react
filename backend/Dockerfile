@@ -3,11 +3,7 @@
 
 FROM python:3.11-slim
 
-<<<<<<< HEAD
 LABEL maintainer="Hexxooor"
-=======
-LABEL maintainer="Patrick"
->>>>>>> 4a542fb (f)
 LABEL description="Triangulation App Backend - Flask API"
 
 # Set environment variables

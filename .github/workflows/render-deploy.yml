@@ -1,11 +1,7 @@
 # 🚀 Render.com Deployment Workflow
 # Automatisches Deployment zur Render.com nach erfolgreichem CI
 
-<<<<<<< HEAD
 name: 🌎 Deploy to Render.com
-=======
-name: 🌐 Deploy to Render.com
->>>>>>> 4a542fb (f)
 
 on:
   push:
@@ -138,11 +134,7 @@ jobs:
         run: |
           echo "🎉 Deployment zu Render.com erfolgreich!"
           echo ""
-<<<<<<< HEAD
           echo "🌎 URLs:"
-=======
-          echo "🌐 URLs:"
->>>>>>> 4a542fb (f)
           echo "Frontend: https://triangulation-frontend.onrender.com"
           echo "Backend:  https://triangulation-backend.onrender.com"
           echo ""
@@ -194,11 +186,7 @@ jobs:
       
       - name: 🔗 Service URLs
         run: |
-<<<<<<< HEAD
           echo "🌎 Deine App ist live unter:"
-=======
-          echo "🌐 Deine App ist live unter:"
->>>>>>> 4a542fb (f)
           echo "Frontend: https://triangulation-frontend.onrender.com"
           echo "Backend:  https://triangulation-backend.onrender.com"
           echo ""
@@ -206,8 +194,4 @@ jobs:
           echo "- Drag & Drop Triangulation"
           echo "- GPS Integration"
           echo "- Mobile Responsive"
-<<<<<<< HEAD
           echo "- Real-time Calculations"
-=======
-          echo "- Real-time Calculations"
->>>>>>> 4a542fb (f)
