@@ -8,11 +8,7 @@ services:
   - type: web
     name: triangulation-frontend
     runtime: docker
-<<<<<<< HEAD
     dockerfilePath: ./frontend/Dockerfile.render
-=======
-    dockerfilePath: ./frontend/Dockerfile
->>>>>>> 4a542fb (f)
     dockerContext: ./frontend
     plan: free
     region: frankfurt
@@ -22,49 +18,29 @@ services:
       - key: NODE_ENV
         value: production
       - key: REACT_APP_API_URL
-<<<<<<< HEAD
         value: https://triangulation-backend.onrender.com
       - key: REACT_APP_VERSION
         value: "2.0.0"
-=======
-        fromService:
-          type: web
-          name: triangulation-backend
-          property: host
-    buildCommand: npm ci && npm run build
-    startCommand: npx serve -s build -l $PORT
->>>>>>> 4a542fb (f)
     
   # Backend Service (Flask API)  
   - type: web
     name: triangulation-backend
-    runtime: docker
-<<<<<<< HEAD
-    dockerfilePath: ./backend/Dockerfile.render
-=======
-    dockerfilePath: ./backend/Dockerfile
->>>>>>> 4a542fb (f)
-    dockerContext: ./backend
+    runtime: python
     plan: free
     region: frankfurt
     branch: main
     healthCheckPath: /api/health
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:application --bind 0.0.0.0:$PORT
     envVars:
       - key: FLASK_ENV
         value: production
       - key: PYTHONUNBUFFERED
         value: "1"
-<<<<<<< HEAD
       - key: CORS_ORIGINS
         value: "https://triangulation-frontend.onrender.com"
       - key: APP_VERSION
         value: "2.0.0"
-=======
-      - key: PORT
-        value: "5000"
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn --bind 0.0.0.0:$PORT app:app
->>>>>>> 4a542fb (f)
 
   # Redis Service (Optional für Caching)
   - type: redis
@@ -72,16 +48,6 @@ services:
     plan: free
     maxmemoryPolicy: allkeys-lru
 
-<<<<<<< HEAD
-=======
-# Databases (Optional für Persistent Storage)
-databases:
-  - name: triangulation-postgres
-    databaseName: triangulation
-    user: triangulation_user
-    plan: free
-
->>>>>>> 4a542fb (f)
 # Environment Groups für gemeinsame Konfiguration
 envVarGroups:
   - name: triangulation-shared
@@ -91,8 +57,4 @@ envVarGroups:
       - key: LOG_LEVEL
         value: INFO
       - key: CORS_ORIGINS
-<<<<<<< HEAD
         value: "https://triangulation-frontend.onrender.com"
-=======
-        value: "*"
->>>>>>> 4a542fb (f)
