@@ -1,0 +1,66 @@
+MIT License
+
+Copyright (c) 2024 Hexxooor - Triangulation App
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+This project includes the following third-party libraries:
+
+### Frontend Dependencies
+- **React** (MIT License) - A JavaScript library for building user interfaces
+- **Bootstrap** (MIT License) - The most popular HTML, CSS, and JS library
+- **Leaflet** (BSD 2-Clause License) - Open-source JavaScript library for mobile-friendly interactive maps
+- **Axios** (MIT License) - Promise based HTTP client for the browser and node.js
+
+### Backend Dependencies  
+- **Flask** (BSD 3-Clause License) - A lightweight WSGI web application framework
+- **NumPy** (BSD 3-Clause License) - The fundamental package for scientific computing with Python
+- **Flask-CORS** (MIT License) - A Flask extension for handling Cross Origin Resource Sharing (CORS)
+
+### Development Dependencies
+- **Docker** - Container platform (Apache License 2.0)
+- **Nginx** - HTTP and reverse proxy server (BSD 2-Clause License)
+
+All third-party licenses are included in their respective package directories and remain under their original license terms.
+
+---
+
+## Attribution
+
+This project uses the following resources:
+- Map data © OpenStreetMap contributors
+- Triangulation algorithms based on established mathematical principles
+- Docker containerization best practices from the Docker community
+- CI/CD patterns from GitHub Actions community templates
+
+---
+
+## Contact
+
+For questions about licensing or attribution:
+- GitHub: [@Hexxooor](https://github.com/Hexxooor)
+- Issues: [GitHub Issues](https://github.com/Hexxooor/triangulation-app-react/issues)
+
+---
+
+**Note:** This software is provided for educational and commercial use. While we strive for accuracy in triangulation calculations, users should verify results for critical applications.
