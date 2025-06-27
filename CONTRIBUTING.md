@@ -44,6 +44,7 @@ npm run dev
 - **Docker** & **Docker Compose** ([Download](https://docker.com/))
 - **Git** ([Download](https://git-scm.com/))
 
+<<<<<<< HEAD
 ### Mit Docker (Empfohlen)
 ```bash
 # Komplettes Setup mit einem Befehl
@@ -55,10 +56,20 @@ npm run dev
 ```
 
 ### Ohne Docker
+=======
+### Lokale Entwicklung
+>>>>>>> 4a542fb (f)
 ```bash
 # Alle Dependencies installieren
 npm run install:all
 
+<<<<<<< HEAD
+=======
+# Mit Docker (empfohlen)
+npm run dev
+
+# Oder ohne Docker
+>>>>>>> 4a542fb (f)
 # Terminal 1: Frontend
 cd frontend && npm start
 
@@ -141,7 +152,11 @@ Verwende **Conventional Commits**:
 
 feat: add drag and drop functionality for reference points
 fix: resolve GPS accuracy calculation bug
+<<<<<<< HEAD
 docs: update deployment guide with Render.com examples  
+=======
+docs: update deployment guide with Kubernetes examples  
+>>>>>>> 4a542fb (f)
 style: format code with prettier
 refactor: extract triangulation logic into separate service
 test: add integration tests for API endpoints
@@ -216,6 +231,55 @@ npm run test:coverage
 - **Integration Tests** für API-Endpoints
 - **E2E Tests** für kritische User Flows
 
+<<<<<<< HEAD
+=======
+```javascript
+// Beispiel: Frontend Test
+import { render, screen, fireEvent } from '@testing-library/react';
+import TriangulationComponent from './TriangulationComponent';
+
+describe('TriangulationComponent', () => {
+  test('should update point position on drag', () => {
+    const mockOnUpdate = jest.fn();
+    const points = [
+      { id: 1, lat: 52.5200, lng: 13.4050, distance: 1000 }
+    ];
+    
+    render(<TriangulationComponent points={points} onPointUpdate={mockOnUpdate} />);
+    
+    // Test implementation...
+    expect(mockOnUpdate).toHaveBeenCalledWith(1, expect.any(Object));
+  });
+});
+```
+
+```python
+# Beispiel: Backend Test
+import pytest
+from app import app
+
+@pytest.fixture
+def client():
+    app.config['TESTING'] = True
+    with app.test_client() as client:
+        yield client
+
+def test_triangulate_endpoint(client):
+    test_data = {
+        'points': [
+            {'lat': 52.5200, 'lng': 13.4050, 'distance': 1000},
+            {'lat': 52.5300, 'lng': 13.4150, 'distance': 1500},
+            {'lat': 52.5100, 'lng': 13.4250, 'distance': 800}
+        ]
+    }
+    
+    response = client.post('/api/triangulate', json=test_data)
+    assert response.status_code == 200
+    assert 'lat' in response.json
+    assert 'lng' in response.json
+```
+
+>>>>>>> 4a542fb (f)
 ## 📦 Pull Requests
 
 ### Bevor du einen PR erstellst
@@ -332,12 +396,20 @@ npm run health
 - **Automatische Tests** bei jedem PR
 - **Docker-Builds** für main branch
 - **Security Scanning** mit Trivy
+<<<<<<< HEAD
 - **Deployment** nach successful merge zu Render.com
+=======
+- **Deployment** nach successful merge
+>>>>>>> 4a542fb (f)
 
 ## 📚 Dokumentation
 
 ### Was dokumentiert werden sollte:
+<<<<<<< HEAD
 - **API-Änderungen** im RENDER_DEPLOYMENT.md
+=======
+- **API-Änderungen** im DEPLOYMENT.md
+>>>>>>> 4a542fb (f)
 - **Neue Features** im README.md
 - **Breaking Changes** im CHANGELOG.md
 - **Code-Kommentare** für komplexe Logik
@@ -367,7 +439,11 @@ npm run dev
 - **GitHub Issues:** Für Bugs und Feature Requests
 - **GitHub Discussions:** Für Fragen und Diskussionen
 - **Code Comments:** Für spezifische Code-Fragen
+<<<<<<< HEAD
 - **Live Demo:** https://triangulation-frontend.onrender.com
+=======
+- **Email:** [your-email@domain.com](mailto:your-email@domain.com)
+>>>>>>> 4a542fb (f)
 
 ### Häufige Fragen
 
@@ -380,8 +456,13 @@ A: `npm run test` für alle Tests, `npm run test:coverage` für Coverage.
 **Q: Wie aktualisiere ich Dependencies?**
 A: Erstelle ein Issue für Dependency-Updates oder einen PR mit den Änderungen.
 
+<<<<<<< HEAD
 **Q: Wo kann ich die Live-Demo testen?**
 A: https://triangulation-frontend.onrender.com
+=======
+**Q: Wie deploye ich lokal?**
+A: `npm run prod` startet die Production-Container lokal.
+>>>>>>> 4a542fb (f)
 
 ## 🙏 Danksagungen
 
@@ -400,4 +481,8 @@ Vielen Dank an alle Contributors, die zu diesem Projekt beitragen! Jeder Beitrag
 
 **Happy Contributing! 🚀**
 
+<<<<<<< HEAD
 Bei Fragen zum Contributing-Prozess, erstelle gerne ein Issue oder teste die Live-Demo unter https://triangulation-frontend.onrender.com
+=======
+Bei Fragen zum Contributing-Prozess, erstelle gerne ein Issue oder kontaktiere das Maintainer-Team direkt.
+>>>>>>> 4a542fb (f)

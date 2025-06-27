@@ -36,4 +36,8 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE $PORT
 
 # Gunicorn für Production
+<<<<<<< HEAD
 CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 60 app:app
+=======
+CMD gunicorn --bind 0.0.0.0:$PORT --workers 2 --timeout 60 app:app
+>>>>>>> 4a542fb (f)

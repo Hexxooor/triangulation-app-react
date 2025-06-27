@@ -4,6 +4,7 @@
   "description": "🎯 Erweiterte Triangulation App mit Drag & Drop, GPS-Integration und Docker-Containerisierung",
   "main": "index.js",
   "private": true,
+<<<<<<< HEAD
   "author": "Hexxooor",
   "license": "MIT",
   "repository": {
@@ -14,14 +15,29 @@
   "keywords": [
     "triangulation",
     "geolocation", 
+=======
+  "author": "Patrick",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/username/triangulation-app-react.git"
+  },
+  "keywords": [
+    "triangulation",
+    "geolocation",
+>>>>>>> 4a542fb (f)
     "react",
     "flask",
     "docker",
     "gps",
     "mapping",
+<<<<<<< HEAD
     "trilateration",
     "render",
     "ci-cd"
+=======
+    "trilateration"
+>>>>>>> 4a542fb (f)
   ],
   "scripts": {
     "dev": "docker-compose -f docker-compose.dev.yml up --build",
@@ -61,7 +77,10 @@
     "monitoring": "docker-compose -f docker-compose.prod.yml --profile monitoring up -d",
     
     "health": "curl -f http://localhost:3000/health && curl -f http://localhost:5000/api/health",
+<<<<<<< HEAD
     "health:live": "curl -f https://triangulation-frontend.onrender.com/health && curl -f https://triangulation-backend.onrender.com/api/health",
+=======
+>>>>>>> 4a542fb (f)
     
     "setup": "npm run install:all && npm run build",
     "quick-start": "npm run dev:detached && echo '🚀 App läuft auf http://localhost:3000'",

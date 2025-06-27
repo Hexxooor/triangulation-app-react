@@ -49,7 +49,11 @@ jobs:
           flags: frontend
           name: frontend-coverage
       
+<<<<<<< HEAD
       - name: 🏧️ Build Frontend
+=======
+      - name: 🏗️ Build Frontend
+>>>>>>> 4a542fb (f)
         working-directory: ./frontend
         run: npm run build
       
@@ -181,7 +185,11 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
       
+<<<<<<< HEAD
       - name: 🏧️ Build Frontend Image
+=======
+      - name: 🏗️ Build Frontend Image
+>>>>>>> 4a542fb (f)
         uses: docker/build-push-action@v5
         with:
           context: ./frontend
@@ -192,7 +200,11 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
       
+<<<<<<< HEAD
       - name: 🏧️ Build Backend Image
+=======
+      - name: 🏗️ Build Backend Image
+>>>>>>> 4a542fb (f)
         uses: docker/build-push-action@v5
         with:
           context: ./backend
@@ -282,11 +294,16 @@ jobs:
           echo "$RESPONSE" | jq -e '.lat and .lng and .accuracy' || exit 1
           echo "✅ Triangulation API working"
       
+<<<<<<< HEAD
       - name: 🧩 Cleanup
+=======
+      - name: 🧹 Cleanup
+>>>>>>> 4a542fb (f)
         if: always()
         run: docker-compose down -v
 
   # =============================================================================
+<<<<<<< HEAD
   # RENDER.COM DEPLOYMENT NOTIFICATION
   # =============================================================================
   notify-render:
@@ -309,3 +326,123 @@ jobs:
           echo "- 📍 GPS-Integration"
           echo "- 📱 Mobile-optimiert"
           echo "- 🔧 Genauigkeitseinstellungen"
+=======
+  # DEPLOYMENT
+  # =============================================================================
+  deploy:
+    name: 🚀 Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [integration-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    environment: production
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: 🚀 Deploy to Production
+        run: |
+          echo "🚀 Deployment würde hier stattfinden..."
+          echo "Beispiele:"
+          echo "- Deploy zu AWS ECS"
+          echo "- Deploy zu Google Cloud Run"
+          echo "- Deploy zu DigitalOcean App Platform"
+          echo "- Deploy zu eigenem Kubernetes Cluster"
+          
+          # Beispiel für Webhook-basiertes Deployment:
+          # curl -X POST ${{ secrets.DEPLOYMENT_WEBHOOK_URL }} \
+          #   -H "Authorization: Bearer ${{ secrets.DEPLOYMENT_TOKEN }}" \
+          #   -d '{"version": "${{ github.sha }}"}'
+
+  # =============================================================================
+  # RELEASE MANAGEMENT
+  # =============================================================================
+  release:
+    name: 📦 Create Release
+    runs-on: ubuntu-latest
+    needs: [integration-test]
+    if: startsWith(github.ref, 'refs/tags/v')
+    
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: 📝 Generate Changelog
+        id: changelog
+        run: |
+          # Einfache Changelog-Generierung
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD~1 2>/dev/null || echo "")
+          if [ -n "$PREVIOUS_TAG" ]; then
+            CHANGELOG=$(git log --pretty=format:"- %s" $PREVIOUS_TAG..HEAD)
+          else
+            CHANGELOG=$(git log --pretty=format:"- %s")
+          fi
+          
+          # Escape newlines für GitHub Actions
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGELOG" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+      
+      - name: 🏷️ Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref_name }}
+          release_name: 🎯 Triangulation App ${{ github.ref_name }}
+          body: |
+            ## 🎯 Triangulation App ${{ github.ref_name }}
+            
+            ### 🚀 Features in dieser Version:
+            - ✅ Drag & Drop für Referenzpunkte
+            - ✅ Entfernungsbearbeitung (Inline-Edit)
+            - ✅ Genauigkeitseinstellungen (0-2km)
+            - ✅ GPS-Integration
+            - ✅ Erweiterte Projektverwaltung
+            - ✅ Mobile Optimierung
+            - 🐳 Docker Containerisierung
+            - 🚀 GitHub Actions CI/CD
+            
+            ### 📝 Changelog:
+            ${{ steps.changelog.outputs.changelog }}
+            
+            ### 🐳 Docker Images:
+            - Frontend: `${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:${{ github.ref_name }}`
+            - Backend: `${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:${{ github.ref_name }}`
+            
+            ### 🚀 Schnellstart:
+            ```bash
+            docker run -d -p 3000:80 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_FRONTEND }}:${{ github.ref_name }}
+            docker run -d -p 5000:5000 ${{ env.REGISTRY }}/${{ env.IMAGE_NAME_BACKEND }}:${{ github.ref_name }}
+            ```
+          draft: false
+          prerelease: false
+
+  # =============================================================================
+  # NOTIFICATION
+  # =============================================================================
+  notify:
+    name: 📢 Notify Team
+    runs-on: ubuntu-latest
+    needs: [deploy, release]
+    if: always()
+    
+    steps:
+      - name: 📢 Success Notification
+        if: needs.deploy.result == 'success' || needs.release.result == 'success'
+        run: |
+          echo "🎉 Deployment/Release erfolgreich!"
+          # Hier könntest Du Slack/Discord/Teams Notifications senden
+          
+      - name: ❌ Failure Notification
+        if: needs.deploy.result == 'failure' || needs.release.result == 'failure'
+        run: |
+          echo "❌ Deployment/Release fehlgeschlagen!"
+          # Hier könntest Du Fehler-Notifications senden
+>>>>>>> 4a542fb (f)

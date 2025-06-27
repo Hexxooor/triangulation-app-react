@@ -1,6 +1,10 @@
 MIT License
 
+<<<<<<< HEAD
 Copyright (c) 2024 Hexxooor - Triangulation App
+=======
+Copyright (c) 2024 Patrick - Triangulation App
+>>>>>>> 4a542fb (f)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -58,9 +62,18 @@ This project uses the following resources:
 ## Contact
 
 For questions about licensing or attribution:
+<<<<<<< HEAD
 - GitHub: [@Hexxooor](https://github.com/Hexxooor)
 - Issues: [GitHub Issues](https://github.com/Hexxooor/triangulation-app-react/issues)
 
 ---
 
 **Note:** This software is provided for educational and commercial use. While we strive for accuracy in triangulation calculations, users should verify results for critical applications.
+=======
+- Email: [your-email@domain.com](mailto:your-email@domain.com)
+- GitHub: [@username](https://github.com/username)
+
+---
+
+**Note:** This software is provided for educational and commercial use. While we strive for accuracy in triangulation calculations, users should verify results for critical applications.
+>>>>>>> 4a542fb (f)

@@ -1,0 +1,54 @@
+# 🚀 Triangulation App Backend - Development Dockerfile
+# Optimiert für Hot Reload und Debugging
+
+FROM python:3.11-slim
+
+LABEL maintainer="Patrick"
+LABEL description="Triangulation App Backend - Development"
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    FLASK_ENV=development \
+    FLASK_DEBUG=1 \
+    PIP_NO_CACHE_DIR=1
+
+WORKDIR /app
+
+# Install system dependencies + development tools
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    git \
+    curl \
+    vim \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install development dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Install additional development tools
+RUN pip install --no-cache-dir \
+    flask-cors \
+    watchdog \
+    python-dotenv
+
+# Copy application code
+COPY . .
+
+# Create non-root user
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+RUN chown -R appuser:appuser /app
+
+# Switch to non-root user
+USER appuser
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD python -c "import requests; requests.get('http://localhost:5000/api/health', timeout=5)" || exit 1
+
+EXPOSE 5000
+
+# Run with hot reload
+CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=5000", "--reload"]

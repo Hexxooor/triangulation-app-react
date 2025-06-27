@@ -49,16 +49,25 @@ Auf welchen Plattformen soll das Feature verfügbar sein?
 - [ ] 🟡 Mittel (verbessert Benutzererfahrung)
 - [ ] 🟢 Niedrig (nice-to-have)
 
+<<<<<<< HEAD
 **🌐 Live Demo Bezug**
 Bezieht sich auf die Live-Demo unter https://triangulation-frontend.onrender.com?
 - [ ] Ja, ich habe die Live-Demo getestet
 - [ ] Nein, allgemeine Verbesserung
 
+=======
+>>>>>>> 4a542fb (f)
 **📋 Zusätzlicher Kontext**
 Weitere Informationen, Links, Referenzen.
 
 **☑️ Checklist**
 - [ ] Ich habe die bestehenden Issues/Features durchsucht
+<<<<<<< HEAD
 - [ ] Ich habe die Live-Demo getestet: https://triangulation-frontend.onrender.com
 - [ ] Das Feature passt zum Scope der App
 - [ ] Ich habe alle relevanten Details bereitgestellt
+=======
+- [ ] Ich habe die Roadmap überprüft
+- [ ] Das Feature passt zum Scope der App
+- [ ] Ich habe alle relevanten Details bereitgestellt
+>>>>>>> 4a542fb (f)

@@ -4,7 +4,11 @@
 # Stage 1: Build Environment
 FROM node:18-alpine as build
 
+<<<<<<< HEAD
 LABEL maintainer="Hexxooor"
+=======
+LABEL maintainer="Patrick"
+>>>>>>> 4a542fb (f)
 LABEL description="Triangulation App Frontend - React"
 
 WORKDIR /app
@@ -54,4 +58,8 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
 EXPOSE 80
 
 # Start nginx
+<<<<<<< HEAD
 CMD ["nginx", "-g", "daemon off;"]
+=======
+CMD ["nginx", "-g", "daemon off;"]
+>>>>>>> 4a542fb (f)

@@ -1,0 +1,46 @@
+# 🚀 Triangulation App Frontend - Development Dockerfile
+# Optimiert für Hot Reload und schnelle Entwicklung
+
+FROM node:18-alpine
+
+LABEL maintainer="Patrick"
+LABEL description="Triangulation App Frontend - Development"
+
+WORKDIR /app
+
+# Install dependencies für bessere Developer Experience
+RUN apk add --no-cache bash git
+
+# Copy package files
+COPY package*.json ./
+
+# Install ALL dependencies (including dev dependencies)
+RUN npm ci --silent
+
+# Copy source code
+COPY . .
+
+# Environment für Development
+ENV NODE_ENV=development
+ENV CHOKIDAR_USEPOLLING=true
+ENV WATCHPACK_POLLING=true
+ENV REACT_APP_API_URL=http://localhost:5000
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S react -u 1001
+
+# Change ownership
+RUN chown -R react:nodejs /app
+
+# Switch to non-root user  
+USER react
+
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD wget --no-verbose --tries=1 --spider http://localhost:3000/ || exit 1
+
+# Start development server
+CMD ["npm", "start"]

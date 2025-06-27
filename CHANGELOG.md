@@ -68,6 +68,7 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
   - Integration Tests
   - Automated Deployment
 
+<<<<<<< HEAD
 ### 🌐 Render.com Integration
 - **Automatisches Deployment**
   - `render.yaml` Konfiguration
@@ -79,6 +80,8 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
   - Frontend: https://triangulation-frontend.onrender.com
   - Backend: https://triangulation-backend.onrender.com
 
+=======
+>>>>>>> 4a542fb (f)
 ### 🔧 Technical Improvements
 - **Erweiterte Triangulation-Algorithmen**
   - Weighted Least Squares für >3 Punkte
@@ -100,7 +103,11 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ### 📚 Documentation
 - **Umfassende README.md** mit allen Features
+<<<<<<< HEAD
 - **Detailliertes RENDER_DEPLOYMENT.md** für Render.com
+=======
+- **Detailliertes DEPLOYMENT.md** für verschiedene Plattformen
+>>>>>>> 4a542fb (f)
 - **CONTRIBUTING.md** für Entwickler
 - **GitHub Issue/PR Templates**
 - **Inline Code-Dokumentation**
@@ -120,8 +127,19 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 ### 🔄 Changed
 - **API-Endpoints erweitert**
   - `/api/triangulate` mit erweiterten Parametern
+<<<<<<< HEAD
   - `/api/health` für Health Checks
   - Render.com-kompatible Port-Konfiguration
+=======
+  - `/api/triangulate/preview` für Live-Updates
+  - `/api/points/validate` für Punktvalidierung
+  - `/api/distance` für Entfernungsberechnung
+
+- **Datenstrukturen optimiert**
+  - Erweiterte Punkt-Objekte mit Metadaten
+  - Hierarchische Projekt-Struktur
+  - Verbesserte Error-Handling
+>>>>>>> 4a542fb (f)
 
 ### 🔒 Security
 - **Container Security**
@@ -136,8 +154,14 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ### 📊 Monitoring & Observability
 - **Health Checks** für alle Services
+<<<<<<< HEAD
 - **Structured Logging** mit JSON Format
 - **Render.com Integration** für Uptime Monitoring
+=======
+- **Prometheus Metrics** Integration
+- **Grafana Dashboards** (optional)
+- **Structured Logging** mit JSON Format
+>>>>>>> 4a542fb (f)
 
 ---
 
@@ -186,6 +210,26 @@ und dieses Projekt folgt [Semantic Versioning](https://semver.org/spec/v2.0.0.ht
 
 ---
 
+<<<<<<< HEAD
+=======
+## [0.1.0] - 2024-04-20
+
+### 🌱 Prototype Release
+
+### ✨ Added
+- **Proof of Concept** für Triangulation
+- **Grundlegende Karte** mit Leaflet
+- **Einfache Punkt-Eingabe**
+- **Basis-Triangulation-Algorithmus**
+
+### 🎯 Goals Achieved
+- Machbarkeitsstudie erfolgreich
+- Grundlegende Triangulation funktionsfähig
+- React + Flask Integration etabliert
+
+---
+
+>>>>>>> 4a542fb (f)
 ## Versioning Schema
 
 Dieses Projekt verwendet [Semantic Versioning](https://semver.org/):
@@ -195,8 +239,14 @@ Dieses Projekt verwendet [Semantic Versioning](https://semver.org/):
 - **PATCH** version: Bug Fixes (rückwärtskompatibel)
 
 ### Version Tags
+<<<<<<< HEAD
 - `v2.0.0` - Erweiterte Triangulation App mit Docker & Render.com
 - `v1.0.0` - Initial Release mit grundlegender Funktionalität
+=======
+- `v2.0.0` - Erweiterte Triangulation App mit Docker
+- `v1.0.0` - Initial Release mit grundlegender Funktionalität
+- `v0.1.0` - Prototype
+>>>>>>> 4a542fb (f)
 
 ### Pre-release Versioning
 - `v2.1.0-alpha.1` - Alpha-Versionen für neue Features
@@ -210,6 +260,7 @@ Dieses Projekt verwendet [Semantic Versioning](https://semver.org/):
 ### Upgrade von v1.0.0 zu v2.0.0
 
 **Breaking Changes:**
+<<<<<<< HEAD
 - Docker-Setup empfohlen für optimale Erfahrung
 - Neue Umgebungsvariablen für erweiterte Features
 - Render.com URLs für Live-Demo
@@ -218,14 +269,32 @@ Dieses Projekt verwendet [Semantic Versioning](https://semver.org/):
 1. Repository klonen: `git clone https://github.com/Hexxooor/triangulation-app-react.git`
 2. Docker-Setup durchführen: `npm run dev`
 3. Live-Demo testen: https://triangulation-frontend.onrender.com
+=======
+- API-Endpoints erweitert (rückwärtskompatibel)
+- Docker-Setup erforderlich für optimale Erfahrung
+- Neue Umgebungsvariablen für erweiterte Features
+
+**Migration Steps:**
+1. Projekte exportieren (falls vorhanden)
+2. Docker-Setup durchführen
+3. Neue Environment-Variablen konfigurieren
+4. Projekte importieren und testen
+>>>>>>> 4a542fb (f)
 
 **Neue Features aktivieren:**
 ```bash
 # Docker-basierte Entwicklung
 npm run dev
 
+<<<<<<< HEAD
 # Render.com Live-Demo
 open https://triangulation-frontend.onrender.com
+=======
+# Neue Environment-Variablen
+REACT_APP_GPS_ENABLED=true
+REACT_APP_DRAG_DROP_ENABLED=true
+REACT_APP_ACCURACY_CIRCLES_ENABLED=true
+>>>>>>> 4a542fb (f)
 ```
 
 ---
@@ -256,13 +325,18 @@ open https://triangulation-frontend.onrender.com
 
 Danke an alle, die zu diesem Projekt beigetragen haben:
 
+<<<<<<< HEAD
 - **Hexxooor** - Hauptentwickler und Maintainer
+=======
+- **Patrick** - Hauptentwickler und Maintainer
+>>>>>>> 4a542fb (f)
 - **Community** - Bug Reports, Feature Requests und Feedback
 
 ---
 
 ## Links
 
+<<<<<<< HEAD
 - **Repository:** https://github.com/Hexxooor/triangulation-app-react
 - **Live Demo:** https://triangulation-frontend.onrender.com
 - **Issues:** https://github.com/Hexxooor/triangulation-app-react/issues
@@ -271,3 +345,13 @@ Danke an alle, die zu diesem Projekt beigetragen haben:
 ---
 
 *Für detaillierte Commit-History siehe [GitHub Commits](https://github.com/Hexxooor/triangulation-app-react/commits/main)*
+=======
+- **Repository:** https://github.com/username/triangulation-app-react
+- **Issues:** https://github.com/username/triangulation-app-react/issues
+- **Releases:** https://github.com/username/triangulation-app-react/releases
+- **Discussions:** https://github.com/username/triangulation-app-react/discussions
+
+---
+
+*Für detaillierte Commit-History siehe [GitHub Commits](https://github.com/username/triangulation-app-react/commits/main)*
+>>>>>>> 4a542fb (f)

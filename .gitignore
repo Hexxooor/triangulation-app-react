@@ -377,4 +377,8 @@ kustomization.yaml
 # Ignore npm lock files in development
 package-lock.json
 
+<<<<<<< HEAD
 # Dependency directories for Docker builds are excluded via .dockerignore
+=======
+# Dependency directories for Docker builds are excluded via .dockerignore
+>>>>>>> 4a542fb (f)

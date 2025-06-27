@@ -23,8 +23,13 @@ Fixes #(issue-nummer)
 
 ### Backend
 - [ ] API-Endpoints geändert/hinzugefügt
+<<<<<<< HEAD
 - [ ] Algorithmus-Verbesserungen
 - [ ] Datenverarbeitung optimiert
+=======
+- [ ] Datenbank-Schema geändert
+- [ ] Algorithmus-Verbesserungen
+>>>>>>> 4a542fb (f)
 
 ### DevOps/Infrastructure
 - [ ] Docker-Konfiguration geändert
@@ -37,7 +42,11 @@ Beschreibe die durchgeführten Tests:
 - [ ] Unit Tests
 - [ ] Integration Tests
 - [ ] Manuelle Tests
+<<<<<<< HEAD
 - [ ] Live-Demo getestet: https://triangulation-frontend.onrender.com
+=======
+- [ ] E2E Tests
+>>>>>>> 4a542fb (f)
 
 **Test-Konfiguration:**
 - Browser: 
@@ -63,7 +72,10 @@ Falls UI-Änderungen vorhanden sind:
 - [ ] Meine Änderungen erzeugen keine neuen Warnungen
 - [ ] Ich habe die Dokumentation entsprechend aktualisiert
 - [ ] Docker-Container bauen erfolgreich
+<<<<<<< HEAD
 - [ ] Live-Demo funktioniert: https://triangulation-frontend.onrender.com
+=======
+>>>>>>> 4a542fb (f)
 - [ ] API-Änderungen sind dokumentiert
 
 ## 🔗 Verwandte Issues/PRs
@@ -95,7 +107,13 @@ Sicherheitsrelevante Aspekte der Änderungen:
 - [ ] Tests geprüft und ausgeführt
 - [ ] Dokumentation geprüft
 - [ ] Docker-Build getestet
+<<<<<<< HEAD
 - [ ] Live-Demo getestet: https://triangulation-frontend.onrender.com
 - [ ] Security-Aspekte betrachtet
 - [ ] Performance-Impact bewertet
 - [ ] Breaking Changes validiert
+=======
+- [ ] Security-Aspekte betrachtet
+- [ ] Performance-Impact bewertet
+- [ ] Breaking Changes validiert
+>>>>>>> 4a542fb (f)

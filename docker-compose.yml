@@ -78,6 +78,47 @@ services:
       timeout: 10s
       retries: 3
 
+<<<<<<< HEAD
+=======
+  # Optional: Monitoring mit Prometheus (für Production)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: triangulation-prometheus
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - triangulation-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    profiles:
+      - monitoring
+
+  # Optional: Grafana für Monitoring Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: triangulation-grafana
+    restart: unless-stopped
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - triangulation-network
+    profiles:
+      - monitoring
+
+>>>>>>> 4a542fb (f)
 # Networks
 networks:
   triangulation-network:
@@ -91,4 +132,19 @@ volumes:
     driver: local
   redis-data:
     name: triangulation-redis-data
+<<<<<<< HEAD
     driver: local
+=======
+    driver: local
+  prometheus-data:
+    name: triangulation-prometheus-data
+    driver: local
+  grafana-data:
+    name: triangulation-grafana-data
+    driver: local
+
+# Beispiel für Secrets (in Production verwenden)
+# secrets:
+#   redis_password:
+#     file: ./secrets/redis_password.txt
+>>>>>>> 4a542fb (f)

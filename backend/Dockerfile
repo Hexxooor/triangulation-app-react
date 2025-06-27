@@ -3,7 +3,11 @@
 
 FROM python:3.11-slim
 
+<<<<<<< HEAD
 LABEL maintainer="Hexxooor"
+=======
+LABEL maintainer="Patrick"
+>>>>>>> 4a542fb (f)
 LABEL description="Triangulation App Backend - Flask API"
 
 # Set environment variables
@@ -45,4 +49,8 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
 EXPOSE 5000
 
 # Run application
+<<<<<<< HEAD
 CMD ["python", "app.py"]
+=======
+CMD ["python", "app.py"]
+>>>>>>> 4a542fb (f)

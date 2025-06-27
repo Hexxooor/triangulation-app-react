@@ -1,0 +1,266 @@
+# 🐳 Docker Compose - Triangulation App Production (Extended)
+# Optimiert für Production mit Load Balancing, SSL und Monitoring
+
+version: '3.8'
+
+services:
+  # Reverse Proxy mit SSL
+  traefik:
+    image: traefik:v2.10
+    container_name: triangulation-traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"  # Traefik Dashboard
+    environment:
+      - TRAEFIK_API_DASHBOARD=true
+      - TRAEFIK_API_INSECURE=true
+      - TRAEFIK_PROVIDERS_DOCKER=true
+      - TRAEFIK_PROVIDERS_DOCKER_EXPOSEDBYDEFAULT=false
+      - TRAEFIK_ENTRYPOINTS_WEB_ADDRESS=:80
+      - TRAEFIK_ENTRYPOINTS_WEBSECURE_ADDRESS=:443
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik:/traefik:ro
+      - traefik-ssl:/ssl
+    networks:
+      - triangulation-prod-network
+      - default
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host(`traefik.triangulation.local`)"
+      - "traefik.http.routers.dashboard.service=api@internal"
+    profiles:
+      - production
+
+  # Frontend Service (Load Balanced)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - REACT_APP_API_URL=/api
+      - REACT_APP_VERSION=${APP_VERSION:-2.0.0}
+    networks:
+      - triangulation-prod-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.triangulation.rule=Host(`triangulation.yourdomain.com`)"
+      - "traefik.http.routers.triangulation.entrypoints=websecure"
+      - "traefik.http.routers.triangulation.tls.certresolver=letsencrypt"
+      - "traefik.http.services.triangulation.loadbalancer.server.port=80"
+      - "traefik.http.routers.triangulation-http.rule=Host(`triangulation.yourdomain.com`)"
+      - "traefik.http.routers.triangulation-http.entrypoints=web"
+      - "traefik.http.routers.triangulation-http.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+
+  # Backend Service (Load Balanced)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    environment:
+      - FLASK_ENV=production
+      - FLASK_DEBUG=0
+      - PYTHONUNBUFFERED=1
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=redis://redis:6379
+      - SECRET_KEY=${SECRET_KEY}
+    volumes:
+      - triangulation-data:/app/data
+    networks:
+      - triangulation-prod-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.triangulation-api.rule=Host(`api.triangulation.yourdomain.com`)"
+      - "traefik.http.routers.triangulation-api.entrypoints=websecure"
+      - "traefik.http.routers.triangulation-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.triangulation-api.loadbalancer.server.port=5000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:5000/api/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+
+  # Production Database (PostgreSQL)
+  postgres:
+    image: postgres:15-alpine
+    container_name: triangulation-postgres
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-triangulation}
+      - POSTGRES_USER=${POSTGRES_USER:-triangulation}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - triangulation-prod-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-triangulation}"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    profiles:
+      - database
+
+  # Redis für Caching und Sessions
+  redis:
+    image: redis:7-alpine
+    container_name: triangulation-redis-prod
+    restart: unless-stopped
+    environment:
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+    volumes:
+      - redis-prod-data:/data
+      - ./redis/redis.conf:/usr/local/etc/redis/redis.conf:ro
+    networks:
+      - triangulation-prod-network
+    command: redis-server /usr/local/etc/redis/redis.conf
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: 128M
+
+  # Monitoring: Prometheus
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: triangulation-prometheus
+    restart: unless-stopped
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    networks:
+      - triangulation-prod-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.triangulation.local`)"
+      - "traefik.http.services.prometheus.loadbalancer.server.port=9090"
+    profiles:
+      - monitoring
+
+  # Monitoring: Grafana
+  grafana:
+    image: grafana/grafana:latest
+    container_name: triangulation-grafana
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./monitoring/grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - ./monitoring/grafana/datasources:/etc/grafana/provisioning/datasources:ro
+    networks:
+      - triangulation-prod-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.triangulation.local`)"
+      - "traefik.http.services.grafana.loadbalancer.server.port=3000"
+    profiles:
+      - monitoring
+
+  # Log Management: Loki
+  loki:
+    image: grafana/loki:latest
+    container_name: triangulation-loki
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./monitoring/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki-data:/loki
+    networks:
+      - triangulation-prod-network
+    command: -config.file=/etc/loki/local-config.yaml
+    profiles:
+      - logging
+
+  # Backup Service
+  backup:
+    image: alpine:latest
+    container_name: triangulation-backup
+    restart: "no"
+    volumes:
+      - triangulation-data:/data/triangulation:ro
+      - postgres-data:/data/postgres:ro
+      - ./backups:/backups
+    networks:
+      - triangulation-prod-network
+    command: |
+      sh -c "
+        apk add --no-cache postgresql-client &&
+        while true; do
+          echo 'Creating backup...' &&
+          tar -czf /backups/triangulation-$$(date +%Y%m%d_%H%M%S).tar.gz /data &&
+          find /backups -name '*.tar.gz' -mtime +7 -delete &&
+          sleep 86400
+        done
+      "
+    profiles:
+      - backup
+
+# Networks
+networks:
+  triangulation-prod-network:
+    driver: bridge
+    name: triangulation-prod-network
+
+# Production Volumes
+volumes:
+  triangulation-data:
+    name: triangulation-prod-data
+  postgres-data:
+    name: triangulation-postgres-data  
+  redis-prod-data:
+    name: triangulation-redis-prod-data
+  prometheus-data:
+    name: triangulation-prometheus-data
+  grafana-data:
+    name: triangulation-grafana-data
+  loki-data:
+    name: triangulation-loki-data
+  traefik-ssl:
+    name: triangulation-traefik-ssl

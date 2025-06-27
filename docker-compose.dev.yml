@@ -87,6 +87,24 @@ services:
       timeout: 10s
       retries: 3
 
+<<<<<<< HEAD
+=======
+  # Development Tools Container
+  # Nützlich für Debugging und Testing
+  devtools:
+    image: node:18-alpine
+    container_name: triangulation-devtools
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace:cached
+      - devtools-node-modules:/workspace/node_modules
+    networks:
+      - triangulation-dev-network
+    command: tail -f /dev/null
+    profiles:
+      - tools
+
+>>>>>>> 4a542fb (f)
   # Test Runner (für automatisierte Tests)
   test-runner:
     build:
@@ -118,4 +136,10 @@ volumes:
   backend-venv:
     name: triangulation-backend-venv
   redis-dev-data:
+<<<<<<< HEAD
     name: triangulation-redis-dev-data
+=======
+    name: triangulation-redis-dev-data
+  devtools-node-modules:
+    name: triangulation-devtools-node-modules
+>>>>>>> 4a542fb (f)

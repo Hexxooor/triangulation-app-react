@@ -22,6 +22,11 @@ Deine Triangulation App kann automatisch auf Render.com deployed werden - einem 
 Name: triangulation-frontend
 Runtime: Docker
 Dockerfile Path: ./frontend/Dockerfile.render
+<<<<<<< HEAD
+=======
+Build Command: npm ci && npm run build
+Start Command: serve -s build -l $PORT
+>>>>>>> 4a542fb (f)
 ```
 
 #### Backend Service:
@@ -29,6 +34,11 @@ Dockerfile Path: ./frontend/Dockerfile.render
 Name: triangulation-backend  
 Runtime: Docker
 Dockerfile Path: ./backend/Dockerfile.render
+<<<<<<< HEAD
+=======
+Build Command: pip install -r requirements.txt
+Start Command: gunicorn --bind 0.0.0.0:$PORT app:app
+>>>>>>> 4a542fb (f)
 ```
 
 ## 🔧 Environment Variables
@@ -45,6 +55,10 @@ REACT_APP_VERSION=2.0.0
 FLASK_ENV=production
 PYTHONUNBUFFERED=1
 CORS_ORIGINS=https://triangulation-frontend.onrender.com
+<<<<<<< HEAD
+=======
+SECRET_KEY=your_secure_secret_key
+>>>>>>> 4a542fb (f)
 ```
 
 ## 🌐 Nach dem Deployment
@@ -111,6 +125,28 @@ curl -H "Authorization: Bearer $RENDER_API_KEY" \
 CORS_ORIGINS=https://triangulation-frontend.onrender.com
 ```
 
+<<<<<<< HEAD
+=======
+## 🚀 GitHub Actions Integration
+
+### Secrets in GitHub Repository setzen:
+
+1. **Gehe zu:** https://github.com/Hexxooor/triangulation-app-react/settings/secrets/actions
+
+2. **Add Repository Secrets:**
+```bash
+RENDER_API_KEY=your_render_api_key_here
+RENDER_FRONTEND_WEBHOOK=https://api.render.com/deploy/srv-YOUR_FRONTEND_ID
+RENDER_BACKEND_WEBHOOK=https://api.render.com/deploy/srv-YOUR_BACKEND_ID
+```
+
+### Workflow Status:
+- ✅ **CI/CD Tests** laufen zuerst
+- ✅ **Docker Builds** werden erstellt
+- ✅ **Render Deployment** startet nach erfolgreichem CI
+- ✅ **Health Checks** verifizieren Deployment
+
+>>>>>>> 4a542fb (f)
 ## 📊 Monitoring
 
 ### Health Checks:
@@ -133,6 +169,50 @@ curl -X POST https://triangulation-backend.onrender.com/api/triangulate \
   }'
 ```
 
+<<<<<<< HEAD
+=======
+### Render Dashboard:
+- **Services:** https://dashboard.render.com/
+- **Logs:** Real-time logs für Debugging
+- **Metrics:** Performance und Uptime Monitoring
+
+## 🎯 Custom Domain (Optional)
+
+### Eigene Domain verbinden:
+1. **Render Dashboard** → **Service** → **Settings** → **Custom Domains**
+2. **Add Custom Domain:** `triangulation.yourdomain.com`
+3. **DNS Records** in deinem Domain Provider setzen:
+   ```
+   CNAME triangulation yourdomain.onrender.com
+   ```
+
+### SSL/HTTPS:
+- **Automatisch aktiviert** für alle Render Services
+- **Let's Encrypt** Zertifikate werden automatisch erneuert
+
+## 🔗 Weitere Services
+
+### Database (Optional):
+```yaml
+# render.yaml erweitern:
+databases:
+  - name: triangulation-postgres
+    databaseName: triangulation  
+    user: triangulation_user
+    plan: free
+```
+
+### Redis (Optional):
+```yaml
+# render.yaml erweitern:
+services:
+  - type: redis
+    name: triangulation-redis
+    plan: free
+    maxmemoryPolicy: allkeys-lru
+```
+
+>>>>>>> 4a542fb (f)
 ## ✨ Nach dem ersten Deployment
 
 ### 1. URLs testen:
@@ -146,6 +226,14 @@ open https://triangulation-frontend.onrender.com
 - **Accuracy Slider** für Genauigkeitseinstellungen
 - **Mobile View** auf dem Smartphone
 
+<<<<<<< HEAD
+=======
+### 3. Performance optimieren:
+- **Render Sleep** vermeiden mit Keep-alive
+- **CDN** für statische Assets
+- **Caching** für API Responses
+
+>>>>>>> 4a542fb (f)
 ---
 
 ## 🎉 Success!
@@ -169,4 +257,8 @@ open https://triangulation-frontend.onrender.com
 
 ---
 
+<<<<<<< HEAD
 **Happy Deploying! 🚀**
+=======
+**Happy Deploying! 🚀**
+>>>>>>> 4a542fb (f)

@@ -30,7 +30,11 @@ Falls zutreffend, füge Screenshots hinzu um das Problem zu erklären.
 - **OS:** [z.B. Windows 10, macOS 12.0, Ubuntu 20.04]
 - **Browser:** [z.B. Chrome 95, Firefox 94, Safari 15]
 - **App Version:** [z.B. 2.0.0]
+<<<<<<< HEAD
 - **URL:** [z.B. https://triangulation-frontend.onrender.com oder localhost:3000]
+=======
+- **Docker Version:** [falls relevant]
+>>>>>>> 4a542fb (f)
 
 **📋 Zusätzlicher Kontext**
 Weitere Informationen zum Problem.
@@ -40,11 +44,21 @@ Falls du eine Idee für eine Lösung hast.
 
 **📊 Logs**
 ```
+<<<<<<< HEAD
 Relevante Logs hier einfügen (Browser Console, Network Tab, etc.)
+=======
+Relevante Logs hier einfügen
+>>>>>>> 4a542fb (f)
 ```
 
 **☑️ Checklist**
 - [ ] Ich habe die bestehenden Issues durchsucht
+<<<<<<< HEAD
 - [ ] Ich habe die Live-Demo getestet: https://triangulation-frontend.onrender.com
 - [ ] Ich kann das Problem reproduzieren
 - [ ] Ich habe alle relevanten Informationen bereitgestellt
+=======
+- [ ] Ich habe die Dokumentation gelesen
+- [ ] Ich kann das Problem reproduzieren
+- [ ] Ich habe alle relevanten Informationen bereitgestellt
+>>>>>>> 4a542fb (f)
